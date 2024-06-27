@@ -90,14 +90,14 @@ fn main() {
             gl::Clear(gl::COLOR_BUFFER_BIT);
         }
 
-        program.use_program();
+        program.bind();
         unsafe {
             gl::BindVertexArray(vao);
             gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
             gl::BindVertexArray(0);
         }
+        program.unbind();
 
-        Program::use_no_program();
         w.window.swap_buffers();
         w.glfw.poll_events();
     }

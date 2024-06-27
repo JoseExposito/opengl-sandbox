@@ -36,11 +36,11 @@ impl Program {
         Self { id }
     }
 
-    pub fn use_program(&self) {
+    pub fn bind(&self) {
         unsafe { gl::UseProgram(self.id) };
     }
 
-    pub fn use_no_program() {
+    pub fn unbind(&self) {
         unsafe { gl::UseProgram(0) };
     }
 }
