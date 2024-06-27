@@ -29,11 +29,11 @@ impl ElementBuffer {
         self.num_indices
     }
 
-    pub fn bind(self) {
+    pub fn bind(&self) {
         unsafe { gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, self.id) };
     }
 
-    pub fn unbind(self) {
+    pub fn unbind(&self) {
         unsafe { gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0) };
     }
 }

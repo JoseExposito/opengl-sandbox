@@ -22,11 +22,11 @@ impl VertexBuffer {
         Self { id }
     }
 
-    pub fn bind(self) {
+    pub fn bind(&self) {
         unsafe { gl::BindBuffer(gl::ARRAY_BUFFER, self.id) };
     }
 
-    pub fn unbind() {
+    pub fn unbind(&self) {
         unsafe { gl::BindBuffer(gl::ARRAY_BUFFER, 0) };
     }
 }
