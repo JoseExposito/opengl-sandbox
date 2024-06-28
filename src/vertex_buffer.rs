@@ -5,18 +5,23 @@ pub struct VertexBuffer {
 }
 
 impl VertexBuffer {
-    pub fn new(vertices: &[f32]) -> Self {
+    pub fn new<T: Sized>(vertices: &[T]) -> Self {
+        assert_ne!(vertices.len(), 0);
+
         let mut id = 0;
+        let size = vertices.len() * std::mem::size_of_val(&vertices[0]);
 
         unsafe {
             gl::GenBuffers(1, &mut id);
+            assert_ne!(id, 0);
             gl::BindBuffer(gl::ARRAY_BUFFER, id);
             gl::BufferData(
                 gl::ARRAY_BUFFER,
-                std::mem::size_of_val(&vertices) as isize,
+                size as isize,
                 vertices.as_ptr().cast(),
                 gl::STATIC_DRAW,
             );
+            gl::BindBuffer(gl::ARRAY_BUFFER, 0);
         }
 
         Self { id }

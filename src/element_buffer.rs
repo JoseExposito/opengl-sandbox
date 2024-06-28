@@ -8,18 +8,23 @@ pub struct ElementBuffer {
 
 impl ElementBuffer {
     pub fn new(indices: &[u32]) -> Self {
+        assert_ne!(indices.len(), 0);
+
         let mut id = 0;
         let num_indices = indices.len() as u32;
+        let size = indices.len() * std::mem::size_of_val(&indices[0]);
 
         unsafe {
             gl::GenBuffers(1, &mut id);
+            assert_ne!(id, 0);
             gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, id);
             gl::BufferData(
                 gl::ELEMENT_ARRAY_BUFFER,
-                std::mem::size_of_val(&indices) as isize,
+                size as isize,
                 indices.as_ptr().cast(),
                 gl::STATIC_DRAW,
             );
+            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
         }
 
         Self { id, num_indices }
