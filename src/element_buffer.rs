@@ -30,7 +30,7 @@ impl ElementBuffer {
         Self { id, num_indices }
     }
 
-    pub fn get_num_indices(self) -> u32 {
+    pub fn get_num_indices(&self) -> u32 {
         self.num_indices
     }
 
