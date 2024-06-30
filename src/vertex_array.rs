@@ -6,6 +6,7 @@ use crate::vertex_buffer_layout::VertexBufferLayout;
 
 pub struct VertexArray {
     id: u32,
+    num_indices: u32,
 }
 
 impl VertexArray {
@@ -18,6 +19,7 @@ impl VertexArray {
         }
 
         let ebo = ElementBuffer::new(&indices);
+        let num_indices = ebo.get_num_indices();
         ebo.bind();
 
         let vbo = VertexBuffer::new(&vertices);
@@ -27,7 +29,7 @@ impl VertexArray {
         vbo.unbind();
         unsafe { gl::BindVertexArray(0) };
 
-        Self { id }
+        Self { id, num_indices }
     }
 
     fn add_layouts(layouts: &VertexBufferLayout) {
@@ -54,6 +56,10 @@ impl VertexArray {
 
             location += 1;
         }
+    }
+
+    pub fn get_num_indices_to_draw(&self) -> u32 {
+        self.num_indices
     }
 
     pub fn bind(&self) {
