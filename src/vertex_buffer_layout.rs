@@ -30,6 +30,12 @@ pub struct VertexBufferLayout {
 }
 
 impl VertexBufferLayout {
+    pub fn new(layout_type: VertexBufferLayoutType, count: u32, normalized: bool) -> Self {
+        let mut ret = VertexBufferLayout::default();
+        ret.add(layout_type, count, normalized);
+        ret
+    }
+
     pub fn add(&mut self, layout_type: VertexBufferLayoutType, count: u32, normalized: bool) {
         let layout_element = VertexBufferLayoutElement {
             layout_type,
