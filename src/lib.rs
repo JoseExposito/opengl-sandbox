@@ -1,5 +1,6 @@
 pub mod element_buffer;
 pub mod program;
+pub mod renderer;
 pub mod shader;
 pub mod vertex_array;
 pub mod vertex_buffer;
