@@ -28,4 +28,8 @@ impl Window {
 
         Self { glfw, window }
     }
+
+    pub fn get_time(&self) -> f32 {
+        self.glfw.get_time() as f32
+    }
 }
