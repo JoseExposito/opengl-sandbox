@@ -3,11 +3,16 @@ use image;
 
 pub struct Texture {
     id: u32,
+    uniform_name: String,
+    slot: u32,
 }
 
 impl Texture {
-    pub fn new(path: &str) -> Self {
+    pub fn new(uniform_name: &str, path: &str, slot: u32) -> Self {
         let mut id = 0;
+
+        let valid_slot_range = 0..31;
+        assert!(valid_slot_range.contains(&slot));
 
         let img = image::open(path).unwrap().into_rgb8();
 
@@ -26,11 +31,7 @@ impl Texture {
                 gl::TEXTURE_WRAP_T,
                 gl::CLAMP_TO_BORDER as i32,
             );
-            gl::TexParameteri(
-                gl::TEXTURE_2D,
-                gl::TEXTURE_MIN_FILTER,
-                gl::LINEAR_MIPMAP_LINEAR as i32,
-            );
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR as i32);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
 
             gl::TexImage2D(
@@ -42,19 +43,30 @@ impl Texture {
                 0,
                 gl::RGB,           // Source image format
                 gl::UNSIGNED_BYTE, // Source image data type
-                img.as_ptr() as *const _,
+                img.into_raw().as_ptr() as *const _,
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
 
             gl::BindTexture(gl::TEXTURE_2D, 0);
         }
 
-        Self { id }
+        Self {
+            id,
+            uniform_name: String::from(uniform_name),
+            slot,
+        }
     }
 
-    pub fn bind(&self, slot: u32) {
+    pub fn get_uniform_name(&self) -> &str {
+        self.uniform_name.as_str()
+    }
+
+    pub fn get_slot(&self) -> u32 {
+        self.slot
+    }
+    pub fn bind(&self) {
         unsafe {
-            gl::ActiveTexture(gl::TEXTURE0 + slot);
+            gl::ActiveTexture(gl::TEXTURE0 + self.slot);
             gl::BindTexture(gl::TEXTURE_2D, self.id);
         }
     }
