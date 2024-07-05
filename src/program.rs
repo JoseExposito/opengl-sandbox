@@ -1,10 +1,12 @@
 use crate::shader::Shader;
+use crate::texture::Texture;
 
 use gl;
 use std::ffi::CString;
 
 pub struct Program {
     id: u32,
+    textures: Vec<Texture>,
 }
 
 impl Program {
@@ -34,7 +36,10 @@ impl Program {
             );
         }
 
-        Self { id }
+        Self {
+            id,
+            textures: Vec::new(),
+        }
     }
 
     pub fn bind(&self) {
@@ -43,6 +48,31 @@ impl Program {
 
     pub fn unbind(&self) {
         unsafe { gl::UseProgram(0) };
+    }
+
+    pub fn add_texture2d(&mut self, texture: Texture) {
+        let c_uniform_name = CString::new(texture.get_uniform_name())
+            .expect("Error creating CString from texture uniform name");
+
+        self.bind();
+        texture.bind();
+        unsafe {
+            let uniform_location = gl::GetUniformLocation(self.id, c_uniform_name.as_ptr());
+            assert_ne!(uniform_location, -1);
+            gl::Uniform1i(uniform_location, texture.get_slot() as i32);
+        }
+        texture.unbind();
+        self.unbind();
+
+        self.textures.push(texture);
+    }
+
+    pub fn bind_textures(&self) {
+        self.textures.iter().for_each(|texture| texture.bind());
+    }
+
+    pub fn unbind_textures(&self) {
+        self.textures.iter().for_each(|texture| texture.unbind());
     }
 
     pub fn set_uniform_4f(&self, uniform_name: &str, v0: f32, v1: f32, v2: f32, v3: f32) {
