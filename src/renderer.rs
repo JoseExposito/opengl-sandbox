@@ -14,6 +14,7 @@ impl Renderer {
         let num_indices = vao.get_num_indices_to_draw();
 
         program.bind();
+        program.bind_textures();
         vao.bind();
 
         unsafe {
@@ -26,6 +27,7 @@ impl Renderer {
         };
 
         vao.unbind();
+        program.unbind_textures();
         program.unbind();
     }
 }
