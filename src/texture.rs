@@ -1,5 +1,6 @@
 use gl;
 use image;
+use image::imageops;
 
 pub struct Texture {
     id: u32,
@@ -14,7 +15,8 @@ impl Texture {
         let valid_slot_range = 0..31;
         assert!(valid_slot_range.contains(&slot));
 
-        let img = image::open(path).unwrap().into_rgb8();
+        let mut img = image::open(path).unwrap();
+        imageops::flip_vertical_in_place(&mut img);
 
         unsafe {
             gl::GenTextures(1, &mut id);
@@ -43,7 +45,7 @@ impl Texture {
                 0,
                 gl::RGB,           // Source image format
                 gl::UNSIGNED_BYTE, // Source image data type
-                img.into_raw().as_ptr() as *const _,
+                img.into_rgb8().into_raw().as_ptr() as *const _,
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
 

@@ -45,14 +45,13 @@ fn main() {
     program.add_texture2d(wall_texture);
     program.add_texture2d(ferris_texture);
 
-    // Note the the coords are inverted because the image is loaded starting at the top-left corner
     #[rustfmt::skip]
     let vertices = [
         // positions      // texture coords
-        -0.5,  0.5, 0.0,  0.0, 0.0,    // top left
-         0.5,  0.5, 0.0,  1.0, 0.0,    // top right
-         0.5, -0.5, 0.0,  1.0, 1.0,    // bottom right
-        -0.5, -0.5, 0.0,  0.0, 1.0f32, // bottom left
+        -0.5,  0.5, 0.0,  0.0, 1.0,    // top left
+         0.5,  0.5, 0.0,  1.0, 1.0,    // top right
+         0.5, -0.5, 0.0,  1.0, 0.0,    // bottom right
+        -0.5, -0.5, 0.0,  0.0, 0.0f32, // bottom left
     ];
 
     let indices = [
