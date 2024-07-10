@@ -2,10 +2,23 @@ use gl;
 
 use crate::{program::Program, vertex_array::VertexArray};
 
-#[derive(Default)]
 pub struct Renderer {}
 
+impl Default for Renderer {
+    fn default() -> Self {
+        Renderer::enable_blending();
+        Self {}
+    }
+}
+
 impl Renderer {
+    fn enable_blending() {
+        unsafe {
+            gl::Enable(gl::BLEND);
+            gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
+        }
+    }
+
     pub fn clear(&self) {
         unsafe { gl::Clear(gl::COLOR_BUFFER_BIT) };
     }

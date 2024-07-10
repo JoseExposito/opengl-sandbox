@@ -30,8 +30,8 @@ void main() {
 }";
 
 fn main() {
-    let renderer = Renderer::default();
     let mut w = Window::new(800, 600, "Hello Rectangle!");
+    let renderer = Renderer::default();
 
     let vertex_shader = Shader::new(ShaderType::VertexShader, VERTEX_SHADER_SRC);
     let fragment_shader1 = Shader::new(ShaderType::FragmentShader, FRAGMENT_SHADER_SRC_1);

@@ -24,8 +24,8 @@ void main() {
 }";
 
 fn main() {
-    let renderer = Renderer::default();
     let mut w = Window::new(800, 600, "Hello Uniform!");
+    let renderer = Renderer::default();
 
     let vertex_shader = Shader::new(ShaderType::VertexShader, VERTEX_SHADER_SRC);
     let fragment_shader = Shader::new(ShaderType::FragmentShader, FRAGMENT_SHADER_SRC);
