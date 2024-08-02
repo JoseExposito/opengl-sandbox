@@ -2,6 +2,7 @@ use crate::shader::Shader;
 use crate::texture::Texture;
 
 use gl;
+use nalgebra_glm as glm;
 use std::ffi::CString;
 
 pub struct Program {
@@ -84,6 +85,19 @@ impl Program {
             let uniform_location = gl::GetUniformLocation(self.id, c_uniform_name.as_ptr());
             assert_ne!(uniform_location, -1);
             gl::Uniform4f(uniform_location, v0, v1, v2, v3);
+        }
+        self.unbind();
+    }
+
+    pub fn set_uniform_mat4(&self, uniform_name: &str, mat4: &glm::Mat4) {
+        let c_uniform_name =
+            CString::new(uniform_name).expect("Error creating CString from uniform name");
+
+        self.bind();
+        unsafe {
+            let uniform_location = gl::GetUniformLocation(self.id, c_uniform_name.as_ptr());
+            assert_ne!(uniform_location, -1);
+            gl::UniformMatrix4fv(uniform_location, 1, gl::FALSE, mat4.as_ptr());
         }
         self.unbind();
     }
